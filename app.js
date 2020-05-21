@@ -17,7 +17,7 @@ $(document).keyup(function (event) {
     $("#keyboard-upper-container").css("display", "none");
     $("#keyboard-lower-container").css("display", "");
   }
-  $("#" + lastKeyPress).css("backgroundColor", "");
+  $(".key").css("backgroundColor", "");
 });
 
 $(document).keypress(function (event) {
