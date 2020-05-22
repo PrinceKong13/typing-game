@@ -1,5 +1,7 @@
-let lastKeyPress;
+let lastKeyPress = "t";
 let currentSentence = 0;
+let charSelector = 0;
+let numberOfMistakes = 0
 let sentences = [
   "ten ate neite ate nee enet ite ate inet ent eate",
   "Too ato too nOt enot one totA not anot tOO aNot",
@@ -8,7 +10,6 @@ let sentences = [
   "nee ene ate ite tent tiet ent ine ene ete ene ate",
 ];
 let sentenceLength = sentences[currentSentence].length;
-let charSelector = 0;
 let currentLetter = sentences[currentSentence][charSelector];
 
 $("#keyboard-upper-container").css("display", "none");
@@ -17,23 +18,33 @@ $("#sentence").append(highLightAt(charSelector));
 
 //Everything in the game runs based on key presses, so most things happen right here
 $(document).keydown(function (event) {
-
   //Shows uppercase keyboard when shift is pressed
   if (event.which == 16) {
     $("#keyboard-upper-container").css("display", "");
     $("#keyboard-lower-container").css("display", "none");
-    
   } else if (charSelector == sentenceLength - 1) {
     newSentence();
 
-    //Moves the highlight and changes current target letter
+    //Moves the highlighter and changes current target letter
   } else {
+    if (event.key == currentLetter) {
+      $("#feedback").append("<span class='glyphicon glyphicon-ok'></span>");
+    } else {
+      $("#feedback").append("<span class='glyphicon glyphicon-remove'></span>");
+      ++numberOfMistakes
+    }
     ++charSelector;
     currentLetter = sentences[currentSentence][charSelector];
     $("#target-letter").text(currentLetter);
     $("#sentence").empty();
     $("#sentence").append(highLightAt(charSelector));
   }
+});
+
+//Highlights keys when pressed and stores the ascii value for the pressed key
+$(document).keypress(function (event) {
+  lastKeyPress = event.which;
+  $("#" + lastKeyPress).css("backgroundColor", "gray");
 });
 
 //Hides the upper case keyboard once shift is released and returns the lower case one. Also returns keys to their original color when released
@@ -43,12 +54,6 @@ $(document).keyup(function (event) {
     $("#keyboard-lower-container").css("display", "");
   }
   $(".key").css("backgroundColor", "");
-});
-
-//Highlights keys when pressed and stores the ascii value for the pressed key
-$(document).keypress(function (event) {
-  lastKeyPress = event.which;
-  $("#" + lastKeyPress).css("backgroundColor", "gray");
 });
 
 //This highlights the target letter in the sentence
@@ -71,5 +76,5 @@ function newSentence() {
   currentLetter = sentences[currentSentence][charSelector];
   $("#target-letter").text(currentLetter);
   sentenceLength = sentences[currentSentence].length;
-
+  $("#feedback").empty();
 }
