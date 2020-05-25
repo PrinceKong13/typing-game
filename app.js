@@ -1,8 +1,10 @@
-let lastKeyPress = "t";
-let currentSentence = 0;
-let charSelector = 0;
-let numberOfMistakes = 0;
-let startTime = Date.now();
+let gameState = {
+  lastKeyPress: "t",
+  currentSentence: 0,
+  charSelector: 0,
+  numberOfMistakes: 0,
+  startTime: Date.now()
+}
 let sentences = [
   "ten ate neite ate nee enet ite ate inet ent eate",
   "Too ato too nOt enot one totA not anot tOO aNot",
@@ -11,8 +13,8 @@ let sentences = [
   "nee ene ate ite tent tiet ent ine ene ete ene ate",
   " ",
 ];
-let sentenceLength = sentences[currentSentence].length;
-let currentLetter = sentences[currentSentence][charSelector];
+let sentenceLength = sentences[gameState.currentSentence].length;
+let currentLetter = sentences[gameState.currentSentence][gameState.charSelector];
 $("#keyboard-upper-container").css("display", "none");
 startGame();
 
@@ -20,16 +22,16 @@ startGame();
 function startGame() {
   $("#target-letter").append("<button id='start'>Start</button>");
   $("#start").click(function () {
-    lastKeyPress = "t";
-    currentSentence = 0;
-    charSelector = 0;
-    numberOfMistakes = 0;
-    startTime = Date.now();
-    sentenceLength = sentences[currentSentence].length;
-    currentLetter = sentences[currentSentence][charSelector];
+    gameState.lastKeyPress = "t";
+    gameState.currentSentence = 0;
+    gameState.charSelector = 0;
+    gameState.numberOfMistakes = 0;
+    gameState.startTime = Date.now();
+    sentenceLength = sentences[gameState.currentSentence].length;
+    currentLetter = sentences[gameState.currentSentence][gameState.charSelector];
     $("target-letter").empty();
     $("#target-letter").text(currentLetter);
-    $("#sentence").append(highlightAt(charSelector));
+    $("#sentence").append(highlightAt(gameState.charSelector));
 
     //Everything in the game runs based on key presses, so most things happen right here
     $(document).keydown(function (event) {
@@ -39,17 +41,17 @@ function startGame() {
         $("#keyboard-lower-container").css("display", "none");
 
         //This sets up a new sentence when the previous one is complete
-      } else if (charSelector == sentenceLength - 1) {
-        ++currentSentence;
-        if (currentSentence == 5) {
+      } else if (gameState.charSelector == sentenceLength - 1) {
+        ++gameState.currentSentence;
+        if (gameState.currentSentence == 5) {
           endGame();
         } else {
-          charSelector = 0;
+          gameState.charSelector = 0;
           $("#sentence").empty();
-          $("#sentence").append(highlightAt(charSelector));
-          currentLetter = sentences[currentSentence][charSelector];
+          $("#sentence").append(highlightAt(gameState.charSelector));
+          currentLetter = sentences[gameState.currentSentence][gameState.charSelector];
           $("#target-letter").text(currentLetter);
-          sentenceLength = sentences[currentSentence].length;
+          sentenceLength = sentences[gameState.currentSentence].length;
           $("#feedback").empty();
         }
 
@@ -61,20 +63,20 @@ function startGame() {
           $("#feedback").append(
             "<span class='glyphicon glyphicon-remove'></span>"
           );
-          ++numberOfMistakes;
+          ++gameState.numberOfMistakes;
         }
-        ++charSelector;
-        currentLetter = sentences[currentSentence][charSelector];
+        ++gameState.charSelector;
+        currentLetter = sentences[gameState.currentSentence][gameState.charSelector];
         $("#target-letter").text(currentLetter);
         $("#sentence").empty();
-        $("#sentence").append(highlightAt(charSelector));
+        $("#sentence").append(highlightAt(gameState.charSelector));
       }
     });
 
     //Highlights keys when pressed and stores the ascii value for the pressed key
     $(document).keypress(function (event) {
-      lastKeyPress = event.which;
-      $("#" + lastKeyPress).css("backgroundColor", "gray");
+      gameState.lastKeyPress = event.which;
+      $("#" + gameState.lastKeyPress).css("backgroundColor", "gray");
     });
 
     //Hides the upper case keyboard once shift is released and returns the lower case one. Also returns keys to their original color when released
@@ -91,25 +93,25 @@ function startGame() {
 //This highlights the target letter in the sentence
 function highlightAt(index) {
   return (
-    sentences[currentSentence].substr(0, index) +
+    sentences[gameState.currentSentence].substr(0, index) +
     "<span class='highlighted'>" +
-    sentences[currentSentence].substr(index, 1) +
+    sentences[gameState.currentSentence].substr(index, 1) +
     "</span>" +
-    sentences[currentSentence].substr(index + 1, sentenceLength)
+    sentences[gameState.currentSentence].substr(index + 1, sentenceLength)
   );
 }
 
 //Ends the game and creates a game over screen. Allows game to be restarted if desired
 function endGame() {
   $(document).off();
-  timeElapsed = Date.now() - startTime;
+  timeElapsed = Date.now() - gameState.startTime;
   minutes = timeElapsed / 60000;
   $("#sentence").empty();
   $("#feedback").empty();
   $("#target-letter").empty();
   $("#sentence").text(
     "Game Over! Your score is: " +
-      ((54 / minutes) - (2 * numberOfMistakes)) +
+      ((54 / minutes) - (2 * gameState.numberOfMistakes)) +
       " Words Per Minutes!"
   );
   $("#target-letter").append("<button id='restart'>Restart</button>");
