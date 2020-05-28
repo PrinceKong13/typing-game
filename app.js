@@ -35,12 +35,15 @@ function startGame() {
 
     //Everything in the game runs based on key presses, so most things happen right here
     $(document).keydown(function (event) {
+      gameState.lastKeyPress = event.key.charCodeAt(0);
+      console.log(gameState.lastKeyPress);
+      $("#" + gameState.lastKeyPress).css("backgroundColor", "gray");
       //Shows uppercase keyboard when shift is pressed
-      if (event.which == 16) {
+      if (event.keyCode == 16) {
         $("#keyboard-upper-container").css("display", "");
         $("#keyboard-lower-container").css("display", "none");
 
-        //This sets up a new sentence when the previous one is complete
+        //This sets up a new sentence when the previous one is complete or ends the game if the last sentence is completed
       } else if (gameState.charSelector == sentenceLength - 1) {
         ++gameState.currentSentence;
         if (gameState.currentSentence == 5) {
@@ -74,14 +77,14 @@ function startGame() {
     });
 
     //Highlights keys when pressed and stores the ascii value for the pressed key
-    $(document).keypress(function (event) {
-      gameState.lastKeyPress = event.which;
-      $("#" + gameState.lastKeyPress).css("backgroundColor", "gray");
-    });
+    // $(document).keypress(function (event) {
+    //   gameState.lastKeyPress = event.which;
+    //   $("#" + gameState.lastKeyPress).css("backgroundColor", "gray");
+    // });
 
     //Hides the upper case keyboard once shift is released and returns the lower case one. Also returns keys to their original color when released
     $(document).keyup(function (event) {
-      if (event.which == 16) {
+      if (event.keyCode == 16) {
         $("#keyboard-upper-container").css("display", "none");
         $("#keyboard-lower-container").css("display", "");
       }
