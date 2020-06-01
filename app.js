@@ -14,8 +14,7 @@ let sentences = [
   " ",
 ];
 let sentenceLength = sentences[gameState.currentSentence].length;
-let currentLetter =
-  sentences[gameState.currentSentence][gameState.charSelector];
+let currentLetter = sentences[gameState.currentSentence][gameState.charSelector];
 $("#keyboard-upper-container").css("display", "none");
 startGame();
 
@@ -29,8 +28,7 @@ function startGame() {
     gameState.numberOfMistakes = 0;
     gameState.startTime = Date.now();
     sentenceLength = sentences[gameState.currentSentence].length;
-    currentLetter =
-      sentences[gameState.currentSentence][gameState.charSelector];
+    currentLetter = sentences[gameState.currentSentence][gameState.charSelector];
     $("target-letter").empty();
     $("#target-letter").text(currentLetter);
     $("#sentence").append(highlightAt(gameState.charSelector));
@@ -77,11 +75,7 @@ function endGame() {
   $("#sentence").empty();
   $("#feedback").empty();
   $("#target-letter").empty();
-  $("#sentence").text(
-    "Game Over! Your score is: " +
-      (54 / minutes - 2 * gameState.numberOfMistakes) +
-      " Words Per Minutes!"
-  );
+  $("#sentence").text("Game Over! Your score is: " + (54 / minutes - 2 * gameState.numberOfMistakes) + " Words Per Minutes!");
   $("#target-letter").append("<button id='restart'>Restart</button>");
   $("#restart").click(function () {
     $("#sentence").empty();
