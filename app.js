@@ -14,7 +14,8 @@ let sentences = [
   " ",
 ];
 let sentenceLength = sentences[gameState.currentSentence].length;
-let currentLetter = sentences[gameState.currentSentence][gameState.charSelector];
+let currentLetter =
+  sentences[gameState.currentSentence][gameState.charSelector];
 $("#keyboard-upper-container").css("display", "none");
 startGame();
 
@@ -28,7 +29,8 @@ function startGame() {
     gameState.numberOfMistakes = 0;
     gameState.startTime = Date.now();
     sentenceLength = sentences[gameState.currentSentence].length;
-    currentLetter = sentences[gameState.currentSentence][gameState.charSelector];
+    currentLetter =
+      sentences[gameState.currentSentence][gameState.charSelector];
     $("target-letter").empty();
     $("#target-letter").text(currentLetter);
     $("#sentence").append(highlightAt(gameState.charSelector));
@@ -77,8 +79,8 @@ function endGame() {
   $("#target-letter").empty();
   $("#sentence").text(
     "Game Over! Your score is: " +
-    (54 / minutes - 2 * gameState.numberOfMistakes) +
-    " Words Per Minutes!"
+      (54 / minutes - 2 * gameState.numberOfMistakes) +
+      " Words Per Minutes!"
   );
   $("#target-letter").append("<button id='restart'>Restart</button>");
   $("#restart").click(function () {
@@ -100,7 +102,6 @@ function showUpperCase() {
   $("#keyboard-lower-container").css("display", "none");
 }
 
-
 //Replaces the current sentence with the next one when completed or ends the game if the last sentence is completed
 function updateSentence() {
   ++gameState.currentSentence;
@@ -110,7 +111,8 @@ function updateSentence() {
     gameState.charSelector = 0;
     $("#sentence").empty();
     $("#sentence").append(highlightAt(gameState.charSelector));
-    currentLetter = sentences[gameState.currentSentence][gameState.charSelector];
+    currentLetter =
+      sentences[gameState.currentSentence][gameState.charSelector];
     $("#target-letter").text(currentLetter);
     sentenceLength = sentences[gameState.currentSentence].length;
     $("#feedback").empty();
@@ -122,17 +124,15 @@ function feedback() {
   if (event.key == currentLetter) {
     $("#feedback").append("<span class='glyphicon glyphicon-ok'></span>");
   } else {
-    $("#feedback").append(
-      "<span class='glyphicon glyphicon-remove'></span>"
-    );
+    $("#feedback").append("<span class='glyphicon glyphicon-remove'></span>");
     ++gameState.numberOfMistakes;
   }
   ++gameState.charSelector;
   currentLetter = sentences[gameState.currentSentence][gameState.charSelector];
   if (currentLetter === " ") {
-    $("#target-letter").text("Space");  
+    $("#target-letter").text("Space");
   } else {
-  $("#target-letter").text(currentLetter);
+    $("#target-letter").text(currentLetter);
   }
   $("#sentence").empty();
   $("#sentence").append(highlightAt(gameState.charSelector));
