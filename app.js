@@ -100,6 +100,7 @@ function showUpperCase() {
   $("#keyboard-lower-container").css("display", "none");
 }
 
+
 //Replaces the current sentence with the next one when completed or ends the game if the last sentence is completed
 function updateSentence() {
   ++gameState.currentSentence;
@@ -128,7 +129,11 @@ function feedback() {
   }
   ++gameState.charSelector;
   currentLetter = sentences[gameState.currentSentence][gameState.charSelector];
+  if (currentLetter === " ") {
+    $("#target-letter").text("Space");  
+  } else {
   $("#target-letter").text(currentLetter);
+  }
   $("#sentence").empty();
   $("#sentence").append(highlightAt(gameState.charSelector));
 }
